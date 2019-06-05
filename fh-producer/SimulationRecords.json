@@ -1,0 +1,65 @@
+{
+  "StepCount": {
+    "unit": "StepCount/Count",
+    "interval": 5,
+    "max": 20,
+    "min": 0,
+    "rate": 2
+  },
+  "HeartRate": {
+    "unit": "HeartRate/Bpm",
+    "interval": 10,
+    "max": 120,
+    "min": 80,
+    "rate": 5
+  },
+  "BodyTemperature": {
+    "unit": "BodyTemperature/C",
+    "interval": 10,
+    "max": 37.3,
+    "min": 36.8,
+    "rate": 0.1
+  },
+  "Respiratory": {
+    "unit": "Respiratory/Bpm",
+    "interval": 10,
+    "max": 18,
+    "min": 12,
+    "rate": 2
+  },
+  "ForcedExpiratoryVolume": {
+    "unit": "ForcedExpiratoryVolume/Litres",
+    "interval": 10,
+    "max": 1.45,
+    "min": 1.30,
+    "rate": 0.01
+  },
+  "BloodPressure.Systolic": {
+    "unit": "BloodPressure.Systolic/mmHg",
+    "interval": 30,
+    "max": 120,
+    "min": 90,
+    "rate": 4
+  },
+  "BloodPressure.Diastolic": {
+    "unit": "BloodPressure.Diastolic/mmHg",
+    "interval": 30,
+    "max": 80,
+    "min": 60,
+    "rate": 4
+  },
+  "PeakExpiratoryFlowRate": {
+    "unit": "PeakExpiratoryFlowRate/L_min",
+    "interval": 60,
+    "max": 530,
+    "min": 400,
+    "rate": 5
+  },
+  "BloodGlucose": {
+    "unit": "BloodGlucose/mmol_L",
+    "interval": 600,
+    "max": 6,
+    "min": 4,
+    "rate": 0.1
+  }
+}
