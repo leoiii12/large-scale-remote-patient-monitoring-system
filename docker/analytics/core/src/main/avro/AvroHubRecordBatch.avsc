@@ -1,0 +1,48 @@
+{
+  "type": "record",
+  "name": "AvroHubRecordBatch",
+  "namespace": "com.fh.avro",
+  "fields": [
+    {
+      "name": "Batch",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "AvroHubRecord",
+          "fields": [
+            {
+              "name": "PatientId",
+              "type": "bytes"
+            },
+            {
+              "name": "Records",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "AvroSensorRecord",
+                  "fields": [
+                    {
+                      "name": "Timestamp",
+                      "type": "long"
+                    },
+                    {
+                      "name": "Value",
+                      "type": "double"
+                    },
+                    {
+                      "name": "Unit",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

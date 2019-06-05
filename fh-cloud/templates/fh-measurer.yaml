@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{.Release.Name}}-fh-measurer"
+  labels:
+    app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+    app.kubernetes.io/instance: {{.Release.Name | quote }}
+    helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    app.kubernetes.io/name: "{{.Release.Name}}-fh-measurer"
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{.Release.Name}}-fh-measurer"
+    spec:
+      containers:
+      - env:
+        - name: FH_ENDPOINT
+          value: "http://{{.Release.Name}}-fh-endpoint-service.{{.Release.Namespace}}"
+        image: {{ index .Values "fh-measurer" "image" }}
+        name: "{{.Release.Name}}-fh-measurer"
+        resources: {}
+      restartPolicy: Always
+status: {}

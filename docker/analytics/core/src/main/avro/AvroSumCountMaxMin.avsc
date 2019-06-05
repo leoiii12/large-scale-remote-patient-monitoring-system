@@ -1,0 +1,27 @@
+{
+  "type": "record",
+  "name": "AvroSumCountMaxMin",
+  "namespace": "com.fh.avro",
+  "fields": [
+    {
+      "name": "Sum",
+      "type": "double"
+    },
+    {
+      "name": "Count",
+      "type": "long"
+    },
+    {
+      "name": "Max",
+      "type": "double"
+    },
+    {
+      "name": "Min",
+      "type": "double"
+    },
+    {
+      "name": "Timestamp",
+      "type": "long"
+    }
+  ]
+}

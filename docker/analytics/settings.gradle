@@ -1,0 +1,21 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        jcenter()
+        maven {
+            name "JCenter Gradle Plugins"
+            url "https://dl.bintray.com/gradle/gradle-plugins"
+        }
+    }
+}
+
+rootProject.name = 'analytics'
+
+include 'core'
+include 'analytics-flink'
+include 'analytics-kstreams'
+include 'analytics-naive'
+include 'analytics-spark'
+include 'sink'
+include 'init-kafka'
+

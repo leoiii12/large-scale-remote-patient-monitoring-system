@@ -1,0 +1,28 @@
+{
+  "type": "record",
+  "name": "AvroAdwinAlert",
+  "namespace": "com.fh.avro",
+  "fields": [
+    {
+      "name": "Id",
+      "type": "bytes"
+    },
+    {
+      "name": "PatientId",
+      "type": "bytes"
+    },
+    {
+      "name": "Unit",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "From",
+      "type": "long"
+    },
+    {
+      "name": "To",
+      "type": "long"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+apply plugin: "java"
+
+group 'com.fh'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+    maven { url "https://packages.confluent.io/maven/" }
+}
+
+def kafkaVersion = '2.1.0'
+def confluentVersion = '5.1.0'
+
+dependencies {
+    compile "org.slf4j:slf4j-api:1.7.25"
+
+    // kafka
+    compile "org.apache.kafka:kafka-clients:$kafkaVersion"
+    compile "io.confluent:kafka-avro-serializer:$confluentVersion"
+
+    compile project(':core')
+
+    testCompile 'org.slf4j:slf4j-simple:1.7.25'
+    testCompile 'junit:junit:4.12'
+}
+
+jar {
+    zip64 = true
+
+    manifest {
+        attributes(
+                'Main-Class': 'com.fh.InitKafka'
+        )
+    }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+
+    exclude('META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA')
+}

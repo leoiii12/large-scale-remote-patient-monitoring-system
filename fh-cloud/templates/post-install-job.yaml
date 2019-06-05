@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{.Release.Name}}"
+  labels:
+    app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+    app.kubernetes.io/instance: {{.Release.Name | quote }}
+    helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: "{{.Release.Name}}"
+      labels:
+        app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+        app.kubernetes.io/instance: {{.Release.Name | quote }}
+        helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    spec:
+      restartPolicy: Never
+      containers:
+      - env:
+        - name: KAFKA_URL
+          value: "{{.Release.Name}}-cp-kafka-headless.{{.Release.Namespace}}:9092"
+        - name: KAFKA_TOPIC
+          value: "fun-health-hub-record-batches,fun-health-sensor-records,fun-health-global-averages,fun-health-aggregated-records,fun-health-alerts,fun-health-sessionized-sensor-records,fun-health-adwin-alerts"
+        - name: NUM_OF_PARTITIONS
+          value: "24"
+        - name: REPLICATION_FACTORS
+          value: "2"
+        name: cp-kafka-post-install-job
+        image: asia.gcr.io/jc1804-220407/fh-analytics-init-kafka:1.0.10
+        command: [
+            "java",
+            "-Xms1g",
+            "-Xmx1g",
+            "-jar",
+            "/home/jars/app.jar"
+        ]

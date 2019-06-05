@@ -1,0 +1,25 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">fh-chart</a>
+
+  <button (click)="pageControls.isCollapsed = !pageControls.isCollapsed" [attr.aria-expanded]="!pageControls.isCollapsed"
+          class="navbar-toggler" type="button">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" [ngbCollapse]="pageControls.isCollapsed">
+
+    <!-- Left -->
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/charts" routerLinkActive="active">Home</a>
+      </li>
+    </ul>
+
+  </div>
+</nav>
+
+<router-outlet></router-outlet>
+
+<br>
+
+<ngx-spinner></ngx-spinner>

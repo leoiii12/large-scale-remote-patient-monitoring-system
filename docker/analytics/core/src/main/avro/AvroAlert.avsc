@@ -1,0 +1,29 @@
+{
+  "type": "record",
+  "name": "AvroAlert",
+  "namespace": "com.fh.avro",
+  "fields": [
+    {
+      "name": "Id",
+      "type": "bytes"
+    },
+    {
+      "name": "PatientId",
+      "type": "bytes"
+    },
+    {
+      "name": "Timestamp",
+      "type": "long"
+    },
+    {
+      "name": "Unit",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "Value",
+      "type": "double",
+      "default": 0.0
+    }
+  ]
+}

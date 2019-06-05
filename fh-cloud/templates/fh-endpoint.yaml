@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{.Release.Name}}-fh-endpoint"
+  labels:
+    app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+    app.kubernetes.io/instance: {{.Release.Name | quote }}
+    helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    app.kubernetes.io/name: "{{.Release.Name}}-fh-endpoint"
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{.Release.Name}}-fh-endpoint"
+    spec:
+      containers:
+      - env:
+        - name: PG_USER
+          value: "crate"
+        - name: PG_URL
+          value: "{{.Release.Name}}-crate-service.{{.Release.Namespace}}"
+        - name: PG_DB
+          value: "doc"
+        - name: PG_PORT
+          value: "5432"
+        image: {{ index .Values "fh-endpoint" "image" }}
+        name: "{{.Release.Name}}-fh-endpoint"
+        ports:
+          - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+status: {}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: "{{.Release.Name}}-fh-endpoint-service"
+  labels:
+    app.kubernetes.io/name: "{{.Release.Name}}-fh-endpoint"
+spec:
+  selector:
+    app.kubernetes.io/name: "{{.Release.Name}}-fh-endpoint"
+{{- if (index .Values "fh-ingress" "enabled") }}
+  type: "NodePort"
+{{- else }}
+  type: "LoadBalancer"
+{{- end }}
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

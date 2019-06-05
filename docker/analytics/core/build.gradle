@@ -1,0 +1,47 @@
+buildscript {
+    ext {
+        kotlinVersion = '1.3.21'
+        corountineVersion = '1.0.1'
+    }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath 'com.commercehub.gradle.plugin:gradle-avro-plugin:0.14.2'
+    }
+}
+
+apply plugin: "java"
+apply plugin: "kotlin"
+apply plugin: "com.commercehub.gradle.plugin.avro"
+
+group 'com.fh'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+}
+
+def avroVersion = '1.8.2'
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$corountineVersion"
+
+    // avro
+    compile "org.apache.avro:avro:$avroVersion"
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += 'src/main/java'
+            srcDirs += 'src/main/kotlin'
+        }
+    }
+}

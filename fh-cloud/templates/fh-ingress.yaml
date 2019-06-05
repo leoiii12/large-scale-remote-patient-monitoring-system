@@ -1,0 +1,23 @@
+{{- if (index .Values "fh-ingress" "enabled") }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: fh-ingress
+  labels:
+    app: fh-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: {{index .Values "fh-ingress" "staticIpName"}}
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/*
+        backend:
+          serviceName: "{{.Release.Name}}-fh-endpoint-service"
+          servicePort: 80
+      - path: /chart/*
+        backend:
+          serviceName: "{{.Release.Name}}-fh-chart-service"
+          servicePort: 80
+{{- end }}

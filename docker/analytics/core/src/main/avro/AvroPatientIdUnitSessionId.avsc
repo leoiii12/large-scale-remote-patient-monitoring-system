@@ -1,0 +1,20 @@
+{
+  "type": "record",
+  "name": "AvroPatientIdUnitSessionId",
+  "namespace": "com.fh.avro",
+  "fields": [
+    {
+      "name": "PatientId",
+      "type": "bytes"
+    },
+    {
+      "name": "Unit",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "SessionId",
+      "type": "long"
+    }
+  ]
+}

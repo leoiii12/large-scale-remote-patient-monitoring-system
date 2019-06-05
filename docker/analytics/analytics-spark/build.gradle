@@ -1,0 +1,48 @@
+apply plugin: 'java'
+
+group 'com.fh'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven { url "https://packages.confluent.io/maven/" }
+}
+
+def confluentVersion = '5.0.0'
+def sparkVersion = '2.4.0'
+
+dependencies {
+    def excludeJackson = {
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
+    }
+
+    // kafka
+    compile "io.confluent:kafka-avro-serializer:$confluentVersion", excludeJackson
+    compile "io.confluent:kafka-schema-registry-client:$confluentVersion", excludeJackson
+
+    // spark
+    compile "org.apache.spark:spark-core_2.11:$sparkVersion"
+    compile "org.apache.spark:spark-sql_2.11:$sparkVersion"
+    compile "org.apache.spark:spark-sql-kafka-0-10_2.11:$sparkVersion"
+    compile "org.apache.spark:spark-mllib_2.11:$sparkVersion"
+    compile "com.fasterxml.jackson.core:jackson-core:2.6.7"
+
+    compile "io.reactivex.rxjava2:rxjava:2.2.2"
+
+    // projects
+    compile project(':core')
+
+    testCompile "junit:junit:4.12"
+}
+
+jar {
+    zip64 = true
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+
+    exclude('META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA')
+}

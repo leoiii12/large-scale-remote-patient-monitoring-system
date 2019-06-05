@@ -1,0 +1,22 @@
+{
+  "name": "latency-measurer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Leo Choi",
+  "license": "MIT",
+  "dependencies": {
+    "@types/pusher-js": "^4.2.0",
+    "@types/request": "^2.48.1",
+    "percentile": "^1.2.1",
+    "pusher-js": "^4.3.1",
+    "request": "^2.88.0",
+    "rxjs": "^6.3.3",
+    "typescript": "^3.1.6"
+  }
+}

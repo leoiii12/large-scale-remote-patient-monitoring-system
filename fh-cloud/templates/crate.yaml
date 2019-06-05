@@ -1,0 +1,115 @@
+kind: StatefulSet
+apiVersion: "apps/v1"
+metadata:
+  name: "{{.Release.Name}}-crate"
+  labels:
+    app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+    app.kubernetes.io/instance: {{.Release.Name | quote }}
+    helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    app.kubernetes.io/name: "{{.Release.Name}}-crate"
+spec:
+  serviceName: "crate-set"
+  # Our cluster has three nodes.
+  replicas: 6
+  selector:
+    matchLabels:
+      # The pods in this cluster have the `app:crate` app label.
+      app.kubernetes.io/name: "{{.Release.Name}}-crate"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{.Release.Name}}-crate"
+    spec:
+      # This final section is the core of the StatefulSet configuration.
+      # It defines the container to run in each pod.
+      containers:
+      - name: "{{.Release.Name}}-crate"
+        # Use the CrateDB 3.0.5 Docker image.
+        image: crate:3.2.6
+        # Pass in configuration to CrateDB via command-line options.
+        # Notice that we are configuring CrateDB unicast host discovery
+        # using the SRV records provided by Kubernetes.
+        command:
+          - /docker-entrypoint.sh
+          - -Ccluster.name=${CLUSTER_NAME}
+          - -Cdiscovery.zen.minimum_master_nodes=5
+          - -Cdiscovery.zen.hosts_provider=srv
+          - -Cdiscovery.srv.query=_crate-internal._tcp.{{.Release.Name}}-crate-service.${NAMESPACE}.svc.cluster.local
+          - -Cgateway.recover_after_nodes=5
+          - -Cgateway.expected_nodes=${EXPECTED_NODES}
+          - -Cpath.data=/data
+        {{- if .Values.crate.persistence.enabled }}
+        volumeMounts:
+          # Mount the `/data` directory as a volume named `data`.
+          - mountPath: /data
+            name: data
+        {{- end }}
+        resources:
+          requests:
+            cpu: 2000m
+            memory: 8192Mi
+          limits:
+            cpu: 3000m
+            memory: 8192Mi
+        ports:
+          # Port 4200 for HTTP clients.
+        - containerPort: 4200
+          name: crate-web
+          # Port 4300 for inter-node communication.
+        - containerPort: 4300
+          name: crate-internal
+          # Port 5432 for PostgreSQL wire protocol clients.
+        - containerPort: 5432
+          name: crate-postgres
+        # Environment variables passed through to the container.
+        env:
+          # This is variable is detected by CrateDB.
+        - name: CRATE_HEAP_SIZE
+          value: "8192m"
+          # The rest of these variables are used in the command-line
+          # options.
+        - name: EXPECTED_NODES
+          value: "6"
+        - name: CLUSTER_NAME
+          value: "my-crate"
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+  {{- if .Values.crate.persistence.enabled }}
+  volumeClaimTemplates:
+    # Use persistent storage.
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        storageClassName: {{ .Values.crate.persistence.storageClass }}
+        resources:
+          requests:
+            storage: {{ .Values.crate.persistence.size }}
+  {{- end }}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: "{{.Release.Name}}-crate-service"
+  labels:
+    app.kubernetes.io/name: "{{.Release.Name}}-crate"
+spec:
+  # A static IP address is assigned to this service. This IP address is
+  # only reachable from within the Kubernetes cluster.
+  type: ClusterIP
+  ports:
+    # Port 4200 for HTTP clients.
+  - port: 4200
+    name: crate-web
+    # Port 4300 for inter-node communication.
+  - port: 4300
+    name: crate-internal
+    # Port 5432 for PostgreSQL wire protocol clients.
+  - port: 5432
+    name: crate-postgres
+  selector:
+    # Apply this to all nodes with the `app:crate` label.
+    app.kubernetes.io/name: "{{.Release.Name}}-crate"

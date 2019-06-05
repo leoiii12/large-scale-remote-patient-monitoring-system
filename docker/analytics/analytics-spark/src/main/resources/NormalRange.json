@@ -1,0 +1,34 @@
+{
+  "HeartRate/Bpm": {
+    "max": 120,
+    "min": 80
+  },
+  "BodyTemperature/C": {
+    "max": 37.3,
+    "min": 36.8
+  },
+  "BloodPressure.Systolic/mmHg": {
+    "max": 120,
+    "min": 90
+  },
+  "BloodPressure.Diastolic/mmHg": {
+    "max": 80,
+    "min": 60
+  },
+  "Respiratory/Bpm": {
+    "max": 18,
+    "min": 12
+  },
+  "BloodGlucose/mmol_L": {
+    "max": 6,
+    "min": 4
+  },
+  "PeakExpiratoryFlowRate/L_min": {
+    "max": 530,
+    "min": 400
+  },
+  "ForcedExpiratoryVolume/Litres": {
+    "max": 1.45,
+    "min": 1.30
+  }
+}

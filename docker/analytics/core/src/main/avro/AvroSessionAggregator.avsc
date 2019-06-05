@@ -1,0 +1,39 @@
+{
+  "type": "record",
+  "name": "AvroSessionAggregator",
+  "namespace": "com.fh.avro",
+  "fields": [
+    {
+      "name": "SessionId",
+      "type": "long"
+    },
+    {
+      "name": "Credits",
+      "type": "long"
+    },
+    {
+      "name": "InitialCredits",
+      "type": "long"
+    },
+    {
+      "name": "RenewingCredits",
+      "type": "long"
+    },
+    {
+      "name": "Sum",
+      "type": "double"
+    },
+    {
+      "name": "Count",
+      "type": "long"
+    },
+    {
+      "name": "Max",
+      "type": "double"
+    },
+    {
+      "name": "Min",
+      "type": "double"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: "{{.Release.Name}}-fh-sink-adwin-alerts"
+  labels:
+    app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+    app.kubernetes.io/instance: {{.Release.Name | quote }}
+    helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    app.kubernetes.io/name: "{{.Release.Name}}-fh-sink-adwin-alerts"
+spec:
+  selector:
+    matchLabels:
+      app: "{{.Release.Name}}-fh-sink-adwin-alerts"
+  replicas: {{ (index .Values "fh-sink-adwin-alerts" "replicas") }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{.Release.Name}}-fh-sink-adwin-alerts"
+        app: "{{.Release.Name}}-fh-sink-adwin-alerts"
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - env:
+        - name: KAFKA_URL
+          value: "{{.Release.Name}}-cp-kafka-headless.{{.Release.Namespace}}:9092"
+        - name: SCHEMA_REGISTRY_URL
+          value: "http://{{.Release.Name}}-cp-schema-registry.{{.Release.Namespace}}:8081"
+        - name: CRATE_DB_URL
+          value: "crate://{{.Release.Name}}-crate-service.{{.Release.Namespace}}:5432/"
+        - name: PUSHER_ENABLED
+          value: "false"
+        - name: MAIN_CLASS
+          value: "com.fh.sink.SinkAdwinAlertsKt"
+        image: {{ index .Values "fh-sink-adwin-alerts" "image" }}
+        name: "{{.Release.Name}}-fh-sink-adwin-alerts"
+        volumeMounts:
+        - name: kafkastreamsdir
+          mountPath: /tmp/kafka-streams
+        resources:
+{{ toYaml (index .Values "fh-sink-adwin-alerts" "resources") | indent 10 }}
+      restartPolicy: Always
+      volumes:
+      {{- if not (index .Values "fh-sink-adwin-alerts" "persistence" "enabled") }}
+      - name: kafkastreamsdir
+        emptyDir: {}
+      {{- end }}
+  {{- if (index .Values "fh-sink-adwin-alerts" "persistence" "enabled") }}
+  volumeClaimTemplates:
+  - metadata:
+      name: kafkastreamsdir
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: "{{ (index .Values "fh-sink-adwin-alerts" "persistence" "size") }}"
+      {{- if (index .Values "fh-sink-adwin-alerts" "persistence" "storageClass") }}
+      {{- if (eq "-" (index .Values "fh-sink-adwin-alerts" "persistence" "storageClass")) }}
+      storageClassName: ""
+      {{- else }}
+      storageClassName: "{{ (index .Values "fh-sink-adwin-alerts" "persistence" "storageClass") }}"
+      {{- end }}
+      {{- end }}
+  {{- end }}
+status: {}
+

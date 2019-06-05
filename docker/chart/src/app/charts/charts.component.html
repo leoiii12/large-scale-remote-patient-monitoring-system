@@ -1,0 +1,36 @@
+<br>
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-md-2">
+
+      <div class="form-group">
+        <input [(ngModel)]="pageControls.partialPatientId" (keyup.enter)="onKeyUpPartialPatientId()" class="form-control" type="text" placeholder="Patient Id, length >= 4">
+      </div>
+
+      <ul *ngIf="patients" class="list-group">
+        <li *ngFor="let patient of patients" (click)="onClickPatientId(patient.patient_id)" class="list-group-item d-flex justify-content-between align-items-center">
+          {{patient.patient_id}}
+          <span class="badge badge-primary badge-pill">{{patient.alert_count || 0}}</span>
+        </li>
+      </ul>
+
+      <p *ngIf="patients && patients.length == 0" class="text-center">Not Found</p>
+      <p *ngIf="patients === undefined" class="text-center">Loading...</p>
+
+    </div>
+
+    <div class="col-md-10">
+
+      <h1>{{selectedPatientId}}</h1>
+
+      <div *ngFor="let unitGroup of unitGroups">
+        <h2>{{unitGroup.unit}}</h2>
+        <br>
+        <ngx-chartjs [data]="unitGroup.data" [options]="unitGroup.options" type="line"></ngx-chartjs>
+        <br>
+      </div>
+
+    </div>
+  </div>
+</div>

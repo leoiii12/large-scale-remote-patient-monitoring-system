@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "AvroPatientIdUnit",
+  "namespace": "com.fh.avro",
+  "fields": [
+    {
+      "name": "PatientId",
+      "type": "bytes"
+    },
+    {
+      "name": "Unit",
+      "type": "string",
+      "default": ""
+    }
+  ]
+}

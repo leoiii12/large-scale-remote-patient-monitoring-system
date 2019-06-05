@@ -1,0 +1,15 @@
+dependencies:
+- name: cp-schema-registry
+  repository: file://./ext-charts/cp-schema-registry
+  version: 0.1.0
+- name: cp-kafka
+  repository: file://./ext-charts/cp-kafka
+  version: 0.1.0
+- name: cp-zookeeper
+  repository: file://./ext-charts/cp-zookeeper
+  version: 0.1.0
+- name: hadoop
+  repository: file://./ext-charts/hadoop
+  version: 1.1.0
+digest: sha256:b6196e259a69137cf119be0830f3b731d7391759975675aad23ec73cff7520bd
+generated: 2019-02-25T11:35:03.399358+08:00

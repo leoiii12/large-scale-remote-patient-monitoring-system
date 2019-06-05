@@ -1,0 +1,111 @@
+{
+  "type": "record",
+  "name": "AvroAdwin",
+  "namespace": "com.fh.avro",
+  "fields": [
+    {
+      "name": "MinClock",
+      "type": "int",
+      "default": 1
+    },
+    {
+      "name": "MinLenWindow",
+      "type": "int",
+      "default": 16
+    },
+    {
+      "name": "Delta",
+      "type": "double",
+      "default": 0.3
+    },
+    {
+      "name": "MaxBuckets",
+      "type": "int",
+      "default": 5
+    },
+    {
+      "name": "MinTime",
+      "type": "int",
+      "default": 0
+    },
+    {
+      "name": "LastBucketRow",
+      "type": "int",
+      "default": 0
+    },
+    {
+      "name": "Sum",
+      "type": "double",
+      "default": 0.0
+    },
+    {
+      "name": "Width",
+      "type": "int",
+      "default": 0
+    },
+    {
+      "name": "Variance",
+      "type": "double",
+      "default": 0.0
+    },
+    {
+      "name": "BucketNumber",
+      "type": "int",
+      "default": 0
+    },
+    {
+      "name": "Count",
+      "type": "int",
+      "default": 0
+    },
+    {
+      "name": "NodeList",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "AvroAdwinNode",
+          "fields": [
+            {
+              "name": "Size",
+              "type": "int",
+              "default": 0
+            },
+            {
+              "name": "MaxBuckets",
+              "type": "int",
+              "default": 5
+            },
+            {
+              "name": "Sum",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "double"
+                }
+              }
+            },
+            {
+              "name": "Variance",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "double"
+                }
+              }
+            },
+            {
+              "name": "Time",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "long"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

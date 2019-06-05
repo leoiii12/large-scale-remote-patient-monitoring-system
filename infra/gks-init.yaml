@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  labels:
+    k8s-app: sysctl-conf
+  name: sysctl-conf
+spec:
+  template:
+    metadata:
+      labels:
+        k8s-app: sysctl-conf
+    spec:
+      containers:
+      - command:
+        - sh
+        - -c
+        - sysctl -w vm.max_map_count=386000 && sysctl -w fs.file-max=1048576 && sysctl -w vm.swappiness=5 && sleep 5000
+        image: busybox:1.30.1
+        name: sysctl-conf
+        resources:
+          limits:
+            cpu: 10m
+            memory: 50Mi
+          requests:
+            cpu: 10m
+            memory: 50Mi
+        securityContext:
+          privileged: true
+      restartPolicy: Always      
+      terminationGracePeriodSeconds: 1
